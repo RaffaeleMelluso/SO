@@ -1,0 +1,16 @@
+Questa lezione ha malloc, calloc
+malloc serve ad allocare memoria nell'heap
+restituisce un puntatore con una zona di memoria 
+p=malloc(size in byte);
+calloc è utile perchè ogni volta azzera lo spazio di heap
+p=calloc(nbyte, sizeofdelpuntatore);
+realloc(*p, size); serve a cambiare la dimensione allocata
+dell'heap senza cancellare nulla o cambiare puntatore.
+
+Queste operazioni permettono di essere eseguite runtime(di base)
+Gli altri metodi sono in compile o in precompile
+
+Bisogna anche liberare la memoria con free(p);  
+s+
+ + 5<T
+ U
