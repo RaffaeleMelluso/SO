@@ -1,0 +1,62 @@
+Struct con padding
+
+struct my_struct{
+    double f;
+    int i;
+    char c;
+};
+
+Union: è simile alle struct, ma abbiamo dei campi 
+sovrapposti allo stesso indirizzo di memoria che viene 
+usato per memorizzare ALTERNATIVE.
+
+es.
+union my_union_t{
+    double f;
+    long i;
+    unsigned char lsb;
+};
+
+Le operazioni su f, i e lsb vanno a modificare 
+il valore nella cella ed influenza tutte le variabili intere
+
+enum (enumerations):
+
+si definiscono valori che hanno valore costante con cui 
+richiamerle
+
+es:
+
+enum month {Gen, Feb, Mar, Apr, May, Jun, 
+             Jul, Aug, Sep, Oct, Nov, Dec };
+
+enum month var;
+var=May;
+col print stampa 3
+var++;
+col print stampa 4
+
+typedef:
+
+typedef <old-type> <new-type>
+
+posso fare anche #define MYTYPE double
+e fare MYTYPE f=0.2;
+
+
+liste dinamiche:
+
+typedef struct node{
+    int value;
+    struct node * next;
+} node;
+
+typedef node * list;
+list head = NULL;
+list new_el = malloc(sizeof(*new_el));
+new_el->next = p;
+
+esempio stampa
+    for(; p->next !=NULL;p=p->next){
+        printf("%i", p->next->value);
+    }
