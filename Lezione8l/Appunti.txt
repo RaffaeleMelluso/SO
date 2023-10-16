@@ -60,3 +60,12 @@ esempio stampa
     for(; p->next !=NULL;p=p->next){
         printf("%i", p->next->value);
     }
+
+per fare il free sulle liste dinamiche 
+dobbiamo svuotarle una ad una altrimenti
+da segmentation error
+
+
+x > y ? "true" : "false";
+
+
