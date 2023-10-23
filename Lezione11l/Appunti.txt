@@ -1,0 +1,59 @@
+GESTIONE DEGLI ERRORI
+
+Per sapere le cause di errore implementiamo la libreria 
+<errno.h> e usiamo una variabile globale int errno;
+esiste una tabella con gli errori e una funzione puntatore char
+strerror(errnum); che descrive l'errore
+
+VARIABILI DI AMBIENTE
+
+Sono delle variabili del sistema, che possono essere modificate
+o visualizzate. Con export nella shell si possono modificare o
+creare le variabili. Con printenv si possono vedere tutte 
+le variabili oppure si può fare con echo $USERVAR.
+
+extern char **environ; 
+
+CLAUSOLA exern si usa per le variabili locali, non alloca
+spazio per la memoria, si alloca in fase di linking.
+
+PROGRAMMAZIONE MODULARE
+Dato che non esistono gli oggetti in C, si usano i moduli
+che sono un insieme di dati e funzioni.
+
+I moduli non hanno i main e si importano con 
+#include "moduloA.h"
+I moduli non si compilano completamente ma solo fino a 
+gcc -c, cioè la parte di compilazione e linking prima di creare
+un eseguibile
+Alcune aziende danno solo il binary già compilato con delle
+istruzioni per usarlo e non il source code, questi non sono
+open source.
+
+L'utente deve fare la fase di linking del modulo con:
+
+gcc application.c module.o -o application 
+crea un eseguibile application.exe con il modulo module.o
+incluso. (prima devi sempre fare gcc -c module.c per creare
+module.o)
+
+DA MODULI A LIBRERIA
+Un elenco di file modulo .o viene detto libreria.
+Esistono librerie statiche (lib.a), e librerie dinamiche
+condivise (lib.so <- shared object)
+Il compilatore (gcc) cerca prima libreria dinamiche, sennò usa 
+quella statiche. 
+Le librerie dinamiche hanno le funzioni più usate in
+memoria in runtime. 
+Mentre le statiche ce le hanno in linking time (usa più memoria).
+Possiamo forzare il caricamento di librerie statiche con:
+gcc test.c -lm -static
+
+Si usa ar (archive) per creare le librerie
+
+ar -cr lib.a mod1.o mod2.o ...  per creare librerie statiche
+(il prof è un pippone e non sa fare quelle dinamiche)
+
+DISASSEMBLARE OGGETTI (OBJECT DUMP)
+Si trasformano in assembly i file .o con:
+objdump -d obj.o
