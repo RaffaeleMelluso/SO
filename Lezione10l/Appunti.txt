@@ -1,0 +1,51 @@
+FILES
+E' una porzione di dati detta buffer, che prima di scrivere 
+sul disco memorizza i dati se invocato.
+
+FILE * f1;
+f1= fopen("file.txt", "r"); 
+// restituisce null o un puntatore al file, ricorda di controllare
+se il file effettivamente si sia aperto con un if
+
+fclose(f1);
+// chiude il file
+
+LETTURA DA FILE
+fgetc(f1);
+//legge un carattere alla volta e restituisce int in codice ASCII
+//o altri codici tipo EOF=-1
+
+fgets(s1, size, f1);
+//legge una stringa alla volta di una certa lunghezza
+
+fscanf(f1,"%d %f ecc");
+
+SCRITTURA DA FILE
+
+fputc(i, f1);
+fputs(s, f1);
+fprintf(f1, "Ciao\n");
+
+La posizione su un file si può controllare con 
+
+fseek(f1, offset, whence);
+
+if (whence == SEEK SET), position is set equal to offset
+if (whence == SEEK CUR), position is moved by offset
+if (whence == SEEK END), position is moved by offset from the end
+
+per sapere la posizione
+ftell(f1); ci dice a che punto siamo in un file
+
+BUFFER:
+abbiamo anche operazioni non bufferizzate tipo 
+write(1, "Ciao\n",5) che manda su stdout=1 Ciao, ignorando
+tutto il buffer
+lo stesso è con read()
+se ci sono operazioni bufferizzate prima verranno ignorate
+ad esempio quando dobbiamo mandarle su un file
+Ma nella stampa da terminale (esecuzione normale)
+sembra tutto normale.
+La bufferizzazione di base è a linee, quindi quando trova \n
+il buffer viene scaricato in memoria.
+
