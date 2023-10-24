@@ -11,17 +11,17 @@ typedef struct{
 
 record * rec_rand_create(int n){
     record * r = (record*) malloc(n*sizeof(record));
+    record * ptr=r;
     int n1=(rand()+1)%MAX_LEN;
     for(int j=0;j<n;j++)
     {
+        ptr->age=(rand()+1)%MAX_AGE;
         for(int i=0;i<n1;i++)
         {
-        (r+j)->name=(rand()+33)%126;          //gen name
-        r->name++;
+            ptr->name[i]=(rand()+65)%126;
         }
-        r->name=(r->name)-n1;
-        (r+j)->age=(rand()+MIN_AGE)%MAX_AGE;
         
+        ptr++;
     }
     
     
