@@ -1,0 +1,39 @@
+man ps //ti da informazioni sul processo
+top //da info sul consumo di cpu e memoria
+kill manda un segnale ad un processo
+IMPORTANTE, NON PER FORZA UCCIDE UN PROCESSO
+ad esempio -CONTINUE serve per continuare un processo
+interrotto
+
+kill -KILL <pid>    manda un SIGKILL per terminare un processo
+lill -STOP <pid>    manda un segnale di pausa al processo,
+                    successivamente si può riprendere con
+                    -CONTINUE
+
+ps -Af | less fa vedere tutti i processi con informazioni intere
+pstree -p | less fa vedere tutti i processi ad albero
+
+Ci sono le stesse system call su C "pid_t getpid(void)" torna il pid del processo chiamante,
+"pid_t getppid(void)" ritorna il pid del processo padre
+
+FORK, CREARE PROCESSI
+Su c possiamo creare processi figli tramite il seguente codice 
+
+#include <unistd.h>
+
+pid_t fork(void);//crea un figlio del processo in esecuzione
+
+Così si fa la copia fisica anche della memoria, che ha gli stessi indirizzi virtuali ma
+i processi hanno indirizzi fisici di memoria diversi. Quindi scrivendo sugli stessi indirizzi
+non si va a modificare lo stesso indirizzo fisico di memoria.
+
+fork(); restituisce il pid del figlio o -1 nel processo padre
+        restituisce 0 nel processo figlio
+Così riusciamo a capire se un processo è foglia.
+
+Si possono fare considerazioni per i fork con l'esercizio provafork.c
+
+Se un processo forkato termina dopo il suo parent viene adottato
+dal processo init pid==1
+
+
