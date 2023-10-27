@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define MAX_LEN 5
+#define MAX_LEN 3
 #define MIN_AGE 1
 #define MAX_AGE 10
 
@@ -11,19 +11,23 @@ typedef struct{
 
 record * rec_rand_create(int n){
     record * r = (record*) malloc(n*sizeof(record));
-    record * ptr=r;
-    int n1=(rand()+1)%MAX_LEN;
-    for(int j=0;j<n;j++)
+    record * ptr=&r;
+    char * name=(char *) malloc(MAX_LEN*sizeof(char));
+    char * pn=&name;
+    int l;
+    for(int i=0;i<n;i++)
     {
-        ptr->age=(rand()+1)%MAX_AGE;
-        for(int i=0;i<n1;i++)
+        ptr->age=(rand()+MIN_AGE)%MAX_AGE;
+        l=(rand()+1)%MAX_LEN;
+        for(int j=0;j<l;j++)
         {
-            ptr->name[i]=(rand()+65)%126;
+            *pn=(rand()+65)%126;
+            pn++;
         }
-        
+        ptr->name=&name;
         ptr++;
     }
-    
+    return r;
     
 }
 
