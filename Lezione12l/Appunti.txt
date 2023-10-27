@@ -1,0 +1,20 @@
+DIPENDENZE PROGETTI
+Quando usiamo librerie c'è una tabella che ci mostra le dipendenze di una applicazione.
+Nello specifico vengono salvate nel file Makefile, che è costruito come segue (esempio):
+
+application /*roba costruita*/ : modulo1.a modulo2.a                        /*cose che servono per costruirlo*/
+    gcc application.o -lmodules -L. -o appplication                         /*comando che serve per farla*/
+
+modulo1.a : moduleA.o moduleB.o
+    ar -crs modulo1.a moduleA.o moduleB.o
+
+ecc...  (attenzione nel file ci vole per forza il tab) 
+tutte queste sono regole esplicite
+poi ci sono delle regole implicite che vengono eseguite se il Makefile non ha nulla
+es.
+make <target>   cerca di fare un eseguibile target da un file <target>.o oppure <target>.c
+
+altra regola implicita, per produrre un punto o si cerca il file con lo stesso nome .c per crearlo
+
+Ci sono tre variabili d'ambiente che influenzano il comando make.
+
