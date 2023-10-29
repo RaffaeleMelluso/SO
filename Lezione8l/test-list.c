@@ -93,7 +93,7 @@ int main()
 	/* insert some numbers in the list... */
 	head = list_insert_head(head, 10);
 	head = list_insert_head(head, 2);
-	head = list_insert_head(head, 15);
+	head =  (head, 15);
 	/* ... print them... */
 	list_print(head);
 	/* ... and clean everything up  */
