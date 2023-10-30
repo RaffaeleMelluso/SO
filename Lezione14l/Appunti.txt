@@ -1,0 +1,39 @@
+SINCRONIZZAZIONE PROCESSI
+    Per evitare che i processi figli terminino prima del padre usiamo
+    wait(NULL) che restituisce -1 se tutti i processi figli sono terminati.
+    Lo implementiamo un ciclo while:
+        while(wait(NULL) != -1)
+    Non causa attesa attiva, perchè la wait è bloccante
+    Funziona per tutti i figli, e non solo per il primo, anche se il grafico
+    nelle slide è fatto malissimo.
+EXIT
+Facendo CTRL+C su linux si invia un segnale al processo in corso che termina.
+Un processo può essere terminato anche con la system call exit(status);
+Quando un processo muore normalmente ritorna 0.
+
+WAIT
+Quando facciamo wait(&parametro), controlla i processi figli, ritorna -1 se finiti
+Può tornare -1 per altri motivi, per questo viene impostato "errno" ad un altro
+valore. Abbiamo diversi valori come ECHILD ecc...
+
+TASKSET
+E' un modo per gestire l'esecuzione del codice con meno core, la maschera è in
+binario 
+
+es. taskset 1 ./a  //un core, taskset 11 ./a // tre core
+
+time <command> restituisce il tempo di esecuzione del comando
+
+WAIT PID
+Possiamo usare la chiamata waitpid(pid, &status_child, options)
+Options possono essere maschere, ecc...
+Il waitpid permette di aspettare uno specifico processo
+Mettendo pid -1 becca qualunque processo figlio
+restituisce -1 se c'è stato un errore
+
+waitpid(chpid, &cstatus, WNOHANG); restituisce 0 se non ci sono figli terminati
+ma non si mette in wait
+
+WUNTRACED, come opzione ritorna anche se il figlio viene terminato con comandi
+esterni
+
