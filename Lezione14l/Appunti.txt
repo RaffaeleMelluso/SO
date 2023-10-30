@@ -1,0 +1,2 @@
+EXECVE
+Permettono di sostituire un eseguibile con un altro processo
