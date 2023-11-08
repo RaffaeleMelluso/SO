@@ -1,0 +1,37 @@
+# Makefile che usa le librerie. Si puo` usare rinominandolo con
+#
+#   mv Makefile_libs Makefile
+#   make <target>
+#
+# oppure con
+#
+#   make -f Makefile_libs <target>
+
+# flag per la normale compilazione
+CFLAGS = -std=c89 -pedantic -O2
+
+# flag per debugging, alcune parti del codice potrebbero richiederela
+# macro DEBUG
+#CFLAGS = -std=c89 -pedantic -O0 -g -DDEBUG
+
+# elenco degli object file necessari
+OBJS    = list-module.o
+
+MYLIB = my_list
+
+# target di compilazione finale
+TARGET = test-list-module
+
+lib$(MYLIB).a: $(OBJS)
+	ar -crs lib$(MYLIB).a $(OBJS)
+
+$(TARGET): $(TARGET).o lib$(MYLIB).a
+	gcc test-list-module.o -l$(MYLIB) -L. -o test-list-module
+
+all: $(TARGET)    # solitamente il target "all" si usa
+
+clean:				# lascia soltanto i file sorgente
+	rm -f *.o *.a $(TARGET) *~
+
+run:	$(TARGET)	# target per eseguire. Necessita dell'eseguibile
+	./$(TARGET)

@@ -63,6 +63,8 @@ timespec ha un campo secondi e un campo nanosecondi.
 ATTENZIONE: I PROCESSI NON SI SINCRONIZZANO CON LO SLEEP.
 Perchè? In situazioni di grande calcolo potrebbe non sincronizzarsi e
 lo scheduler potrebbe allungare il tempo calcolando altro.
+Nella realtà la sleep e la nanosleep di base si blocca quando si
+riceve un segnale. 
 
 
 
