@@ -1,0 +1,68 @@
+SEGNALI: CICLO DI VITA
+Viene generato un segnale
+Questi possono essere sincroni o asincroni, noi studieremo solo gli
+asincroni.
+Se viene applicata una maschera viene ritardata la sua ricezione.
+Quando un segnale è mascherato viene messo in attesa, se arrivano altri
+i due segnali vengono uniti il singolo viene messo in attesa (pending)
+
+Dopo la generazione il segnale viene mascherato nel processo di
+handling, e poi viene "smascherato" nell'esecuzione normale
+
+Con sigprocmask(...) si può mascherare/bloccare un segnale
+Per sbloccare un processo si usa lo stetto comando.
+Dopo lo sblocco il segnale viene mandato all'handler e si segue la 
+procedura standard.
+
+Se durante il blocco viene mandato lo stesso tipo di segnale da un altro
+processo o dallo stesso, viene unito a quello precedente e dopo lo sblocco
+viene mandato il messaggio fuso nell'handler.
+
+MANIPOLAZIONE SEGNALI
+Esistono varie funzioni che modificano le maschere dei segnari come 
+insiemi (set). Infatti rapprestentano operazioni sugli insiemi
+sigemptyset(), svuota il set di segnali
+sigfillset(),
+sigaddset(), somma a tutto il set dei bit
+sigremset(), elimina elementi dal set
+.
+.
+.
+
+sigprocmask(how, *set, *oldset)
+how, indica cosa fare:
+    SIG_BLOCK, aggiungi alla maschera il segnale da bloccare
+    SIG_UNBLOCK, sblocca dalla maschera il segnale
+    SIG_SETMASK, imposta la maschera come il set passato in input.
+                 (rimuove quelli precedenti)
+*set, indica i segnali da bloccare/sbloccare
+*oldset, reimposta la maschera precedente una volta finita l'operazione.
+
+sigset_t maschera; crea un set di segnali o maschera
+
+CASI PARTICOLARI
+Se ho una maschera e vengono inviati più segnali non riesco a fare il 
+merge a tutti, quindi avrò meno handling di quanti segnali ho mandato
+
+FLAGS
+Ci permettono di gestire più segnali senza errori. Questo ci permette
+di non perderci nessun segnale.
+
+SLEEP E PAUSE
+pause(); viene usato quando vogliamo mandare in attesa il processo
+        un processo bloccato con pause riprende con l'apposito segnale
+
+sleep(secondi); manda in attesa il processo per int secondi, Quando
+        viene mandato un segnale ed il processo è in attesa restituisce
+        quanti secondi sono passati
+
+nanosleep prende in ingresso una struct timespec tempo; e dorme per tot
+nanosecondi nanosleep(&tempo, NULL);
+timespec ha un campo secondi e un campo nanosecondi.
+
+ATTENZIONE: I PROCESSI NON SI SINCRONIZZANO CON LO SLEEP.
+Perchè? In situazioni di grande calcolo potrebbe non sincronizzarsi e
+lo scheduler potrebbe allungare il tempo calcolando altro.
+
+
+
