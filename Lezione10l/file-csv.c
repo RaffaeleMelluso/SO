@@ -25,11 +25,26 @@ int * cCR (char * stream)
     fclose(fp);
     return v;
 }
+void data_column_process(int * data, int length, int * min, int * max, double * avg)
+{
+    double som=0;
+    for(int i=0;i<length;i++)
+    {
+        if(data[i]>*max)
+            *max=data[i];
+        if(data[i]<*min)
+            *min=data[i];
+        som+=data[i];
+        
+    }
+    *avg=som/length;
+
+}
 int main (int argc, char * argv[])
 {
     FILE *fp;
     char s[size], *token;
-    int min=99,max=0;
+    int min=99,max=-99;
     int * cr=cCR("file.csv"/*argv[1]*/);
     double avg;
     if((fp=fopen("file.csv"/*argv[1]*/,"r"))==NULL)
@@ -55,6 +70,18 @@ int main (int argc, char * argv[])
             token=strtok(NULL,s);
         }
         printf("\n");
+    }
+    int v[cr[0]];
+    for (int i = 0; i < cr[0]; i++)
+    {
+        for(int j=0; j < cr[1]; j++)
+        {
+            v[j]=m[j][i];
+        }
+        data_column_process(v, cr[0]+1, &min, &max, &avg);
+        printf("Minimo:%i, Massimo:%i, Avg:%f\n", min, max, avg);
+        max=-99;
+        min=99;
     }
     
     
