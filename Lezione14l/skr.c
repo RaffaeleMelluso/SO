@@ -9,10 +9,11 @@
 
 int main(int argc, char const *argv[])
 {
-    int num,status,sum=0;
+    int num,status,sum=0,pid;
     for(int i=0;i<NUM_KIDS;i++)
     {
-        if(!fork())
+        pid=fork();
+        if(!pid)
         {
             srand(getpid());
             num=(rand()+1)%7;
