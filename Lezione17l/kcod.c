@@ -7,9 +7,10 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+
 void handle_signal(int signal);
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[]) //argv[1] timeout, argv[2] niter, argv[3] nkids
 {
     int nkids=atoi(argv[3]);
     int pid;
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
     for(int i=0;i<nkids;i++)
     {
         pid=fork();
-        if(!pid)
+        if(!pid) //figlio
         {
             if(execve("cl.out",argv, NULL)!=-1)
             {
@@ -28,9 +29,19 @@ int main(int argc, char *argv[])
             else
                 fprintf(stderr,"Errore nell'apertura di cl.c\n");
         }
-        else
+        else //padre
         {
-            waitpid(pid,&status,0);
+            while(wait(&status)!=-1)
+            {
+                if(WEXITSTATUS(status)==1)
+                {
+                    char new[4]=argv;
+                    new[2]=(char*)(atoi(argv[2])/2);
+                    pid=fork();
+                    if(!pid)
+                        execve("cl.out",new, NULL);
+                }
+            }
         }
     }
     

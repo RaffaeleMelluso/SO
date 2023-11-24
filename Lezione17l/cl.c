@@ -44,6 +44,5 @@ int main(int argc, char *argv[])
         printf("%i)I'm chilling\n",i);
         sleep(1);
     }
-    
     return 0;
 }
