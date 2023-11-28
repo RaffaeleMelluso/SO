@@ -10,7 +10,7 @@
 void handle_signal(int signal)
 {
     printf("TIMEOUT\n");
-    exit(1);
+    exit(-2);
 }
 
 int main(int argc, char *argv[])
@@ -38,11 +38,14 @@ int main(int argc, char *argv[])
 
     int niter=atoi(argv[2]), 
         timeout=atoi(argv[1]);
+    
     alarm(timeout);
+    fprintf(stdout,"timeout argv[1]:%d, argv[2]:%d\n",timeout,niter);
     for(int i=1;i<=niter;i++)
     {
         printf("%i)I'm chilling\n",i);
         sleep(1);
     }
-    return 0;
+    exit(niter);
+    return niter;
 }
