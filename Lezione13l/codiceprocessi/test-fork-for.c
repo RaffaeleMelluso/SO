@@ -10,6 +10,7 @@ int main() {
 	unsigned int my_pid, my_ppid, value;
 	
 	/* How many processes are really generated? */
+	int k=0;
 	for (i=0; i<NUM_FORKS; i++) {
 		
 		value = fork();
@@ -18,6 +19,8 @@ int main() {
 		/* How many printed lines? */
 		printf("PID=%6d,  PPID=%6d,  i=%d, fork_value=%d\n",
 		       my_pid, my_ppid, i, value);
+		k++;
 	}
+	printf("%d\n",k);
 	exit(EXIT_SUCCESS);
 }
