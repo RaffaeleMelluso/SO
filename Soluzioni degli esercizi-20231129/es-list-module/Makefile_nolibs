@@ -1,0 +1,32 @@
+# Makefile che non usa le librerie. Si puo` usare rinominandolo con
+#
+#   mv Makefile_nolibs Makefile
+#   make <target>
+#
+# oppure con
+#
+#   make -f Makefile_nolibs <target>
+
+# flag per la normale compilazione
+CFLAGS = -std=c89 -pedantic -O2
+
+# flag per debugging, alcune parti del codice potrebbero richiederela
+# macro DEBUG
+#CFLAGS = -std=c89 -pedantic -O0 -g -DDEBUG
+
+# elenco degli object file necessari
+OBJS    = list-module.o test-list-module.o
+
+# target di compilazione finale
+TARGET = test-list-module
+
+$(TARGET): $(OBJS)
+	gcc $(OBJS) -o $(TARGET)
+
+all: $(TARGET)    # solitamente il target "all" si usa
+
+clean:				# lascia soltanto i file sorgente
+	rm -f *.o $(TARGET) *~
+
+run:	$(TARGET)	# target per eseguire. Necessita dell'eseguibile
+	./$(TARGET)

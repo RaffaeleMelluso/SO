@@ -1,0 +1,42 @@
+MEMORIA CONDIVISA
+Non è mediata, quindi ci sono vari rischi.
+
+CREAZIONE
+Un segmento di memoria condivisa si crea con shmget(),
+serve la quantità di memoria.
+Ritorna un numero
+
+shmid=shmget(key, size, shmflag);
+//sono gli stessi parametri degli ipc
+//si usa IPC_CREAT,IPC_EXL ecc...
+
+
+ATTACHING
+Il numero di ritorno si usa insieme al base adress del
+processo per identificare la mem. condivisa.
+
+void *shmat(int shmid, NULL, shmflag);
+ritorna un puntatore a void che si usa per accedere alla 
+memoria (come malloc);
+
+DETACHING
+Si distacca il segmento di memoria dal puntatore
+(resta in memoria)
+
+int shmdt(const void *shmp);
+Si può fare anche implicitamente facendo terminare il processo,
+o si passa con exec() il control flow.
+
+DEALLOCATION SHMCTL
+Si libera il segmento di memoria.
+shmctl(int shmid, IPC_RMID, NULL);
+Si usa questa funzione che serve a controllare in generale
+la shared memory. 
+Nel secondo campo si mette il comando (int),
+il terzo dipende dal comando
+
+L'effettiva deallocazione avviene quando viene mandato il comando
+ed i processi attached diventano 0. (IMPORTANTE)
+
+
+

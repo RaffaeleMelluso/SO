@@ -1,0 +1,91 @@
+IPC (inter process comunication)
+I processi possono comunicare tra loro tramite ipc objects
+messaggi, memoria condivisa e semafori
+Non vengono eliminati dopo che i processi vengono terminati (bisogna
+ricordarsi di chiuderli)
+
+Usando il comando ipc e ipc -l possiamo vederli
+
+Ogni ipc object ha un id di tipo int che è unico solo per tipo,
+è simile al file descriptor
+
+COME USARE IPC OBJECT
+
+open(char *filename, int flags);
+Ritona il numero di file descriptor.
+
+Abbiamo anche l'equivalente dei "get" per questi oggetti
+
+msgget(key_t key , int flags);
+shmget(key_t key, size_t size, int flags);
+semget(key_t key, int nsems, int flags);
+
+Tutte le funzioni ritornano l'id. La key può essere il ppid.
+Le flags sono in ottale:
+0400 read to user 
+0020 write to group
+0666 r/w to everybody
+
+Per passare diverse flag o macro dobbiamo usare il bitwise or |
+
+CASI D'USO 
+
+1) Creazione di ipc object:
+    id = msgget(IPC_PRIVATE, 0600); //IPC_PRIVATE esiste già
+    Poi questo id viene passato ad altri processi tramite fork o tramite
+    argomento in stringa con execve
+2) Creazione di oggetto con chiave data:
+    id= msgget(key, IPC_CREAT | IPC_EXCL | flags); 
+    si crea un oggetto con key esclusiva, se quella chiave già esiste
+    ritorna -1
+3) Usare oggetto tramite una chiave data:
+    id=msgget(key, IPC_CREAT, 0660); //IPC_CREAT serve a creare se non esiste
+    se va tutto bene abbiamo l'id di quell'oggetto.
+N.B. installare un'estensione che con CTRL+C da terminale cancelli anche
+    gli ipc object.
+
+MESSAGE QUEUES FORMATI DI MESSAGGI 
+Ogni messaggio ha un tipo, che è la prima parte del messaggio
+
+INVIO
+Per mandare un messaggio usiamo:
+msgsnd(int msquid, const void *msgp, size_t msagsize, int msgflag);
+dove: msquid è l'id della coda, msgp è il puntatore al messaggio
+      msgsize=sizeof(struct msgbuffer)-sizeof(long)
+Se la coda è piena l'istruzione mette in automatico in wait, quindi
+non serve ciclare fin quando non è diverso da -1
+
+RICEZIONE
+Per ricevere un messaggio usiamo:
+msgrcv(int msquid, void *msgp, int msgsize, long mtype, int msgflag);
+dove:
+msgsize serve a dire la dimensione del messaggio,
+mtype serve a specificare il tipo del messaggio:
+==0, tipo del primo messaggio
+>0, il primo messaggio di tipo più grande
+<0, messaggi di tipi più piccoli
+
+msgrcv() è un'operazione bloccante
+La ricezione consuma il messaggio 
+
+ERRORI
+bisogna vedere il codice di errno
+
+EACCES, errore di permesso negato
+EIDRM, error id removed
+EINTR, la ricezione o l'invio non sono andati a buon fine 
+ENOMEM, memoria piena
+E2BIG, coda troppo grande
+
+CONTROLLO MESSAGGI 
+
+msgctl(int msquid, int cmd, struct msquid_ds *buf);
+Serve per controllare la coda mandando dei comandi tramite cmd
+
+msgctl(int msquid, IPC_RMID, NULL); elimina la coda.
+
+Se c'è il ricevitore e la coda viene eliminata il riacevitore ottiene
+il messaggio di removed.
+
+
+

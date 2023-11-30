@@ -1,0 +1,99 @@
+FILE DESCRIPTORS
+Indicano un indice in una tabella di un sorgente o destinazione (sink) dove vengono
+inseriti dei byte
+fd=0 prende dalla tastiera
+fd 1 scrive nel terminale
+fd 2 scrive nel terminale degli errori
+fd 3 o in su identifica un file
+Quando fai close si toglie l'identificatore dal file ed è livero
+
+Con una fork si crea una copia dei file descriptors del padre.
+Dopo la fork però essi rimangono indipendenti, quindi bisogna modificarli
+su tutti e due i processi.
+
+PIPES
+I pipes sono dei flussi monodirezionali di pipe;
+Chiamata:
+
+int pipefd[2];
+pipe(pipefd); //ritorna 0 se ha successo
+
+pipefd[0] è un file descriptor che indica la fine del pipe
+pipefd[1] è l'inizio del pipe
+
+Ogni cosa che scrivo su pipefd[1] può essere letta su pipefd[2]
+Questa struttura è utile perchè possiamo far comunicare i processi, quindi
+mettere un'area di memoria condivisa. Noi realizzeremo meccanismi di
+comunicazione unidirezionali.
+
+La lettura da pipe consuma i byte. Se restano dei byte dopo la lettura
+vengono ritornati dalla read().
+Se non ci sono byte nella pipe la read si ferma, cioè aspetta che venga
+scritta qualcosa.
+Se non ci sono scrittori assegnati alla pipe si blocca.
+Lettori e Scrittori una volta staccati dalla pipe non potranno più riattaccarsi
+
+Anche la write() può essere bloccante, ad esempio se la pipe è piena e si vuole
+scrivere. write() ritorna il numero di byte scritti nella pipe.
+Se non ci sono lettori assegnati alla pipe si invia un SIGPIPE e il processo
+termina.
+
+I pipe devono essere unidirezionali, e i file descriptors non usati devono essere
+chiusi, perchè altrimenti si bloccano i processi, perchè abbiamo canali aperti
+ma che non leggeranno o scriveranno mai. (si sballano i valori di ritorno ed 
+i SIGPIPE).
+
+COMPORTAMENTO PIPES
+Quando vogliamo chiudere un pipe lo facciamo dal lato dello scrittore, così il
+lettore riceverà come valore "end" e ritornerà 0.
+La dimensione del pipe può essere vista tramite la variabile PIPE_BUF
+(es. 4096 byte).
+Non possiiamo eccedere questa dimensione, e ogni operazione legge tutto il buffer
+altrimenti avremo problemi di lettura tra vari processi.
+
+read() e write() danno -1 come errore e impostano errno con EINTR.
+Non possiamo spostare o visualizzare il cursore nei pipe, otteniamo errore.
+
+Possiamo anche usare dprintf e dscanf.
+
+il buffer deve essere inizializzato.
+
+REINDERIZZARE INPUT E OUTPUT CON PIPE
+E' possibile copiare un file descriptor su un altro con dup2(fd_da_copia,fd_da_riscr)
+
+ROBE STRANE
+Possiamo usare le pipe per scrivere le robe da terminale.
+Il carattere | usato per separare i comandi manda l'output dal primo comando
+all'output del secondo proprio tramite pipe.
+
+execve(*path, *argv[], *env[]); permette di attaccare tramite pipe un processo a
+quello su cui è scritto questo comanto. Linux ci permette di farlo dopo una
+fork. Tutto del chiamante viene sostituito dal chiamato path
+
+FUNZIONI UTILI
+
+popen(*command, "r" o "w"); forka un nuovo processo con cui output/input 
+è collegato al processo padre
+
+non possiamo fare fclose, usiamo pclose(stream); chiude i file descriptors e 
+chiude la pipe.
+Attenzione, i figli leggono o scrivono dal padre.
+
+FIFO
+I file descriptors si possono usare solo tra "famigliari". Per far comunicare
+due processi non legati usiamo i fifo o named pipe.
+
+Come crearli (da shell)
+mkfifo fifo1 //crea la fifo
+ls -latr //ci fa vedere tutto i file con segnato p ci indicano che sono di tipo pipe
+ls > fifo1 //mandiamo il risultato di sl su fifo1
+
+passiamo ad un altro terminale
+cat fifo1 //possiamo vedere il risultato di ls
+
+Come crearli (da c)
+mkfifo(*pathname, mode); //mode sono r o w ecc...
+
+
+
+
