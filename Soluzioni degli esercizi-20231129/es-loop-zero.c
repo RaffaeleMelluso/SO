@@ -96,8 +96,8 @@ int main(int argc, char const *argv[])
 	for (var = 0; 1; var++) {
 		if (var > n_max) {
 			var = 0;
-			/* If child, send SIGUSR1 to parent */
-			if (!n_kids)
+			/*If child, send SIGUSR1 to parent */
+			if (!n_kids) 
 				kill(getppid(), SIGUSR1);
 		}
 	}
