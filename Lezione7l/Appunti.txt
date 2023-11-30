@@ -11,6 +11,3 @@ Queste operazioni permettono di essere eseguite runtime(di base)
 Gli altri metodi sono in compile o in precompile
 
 Bisogna anche liberare la memoria con free(p);  
-s+
- + 5<T
- U
