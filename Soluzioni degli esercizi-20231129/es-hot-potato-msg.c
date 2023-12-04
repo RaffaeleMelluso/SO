@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
 	
 	/* Now forking kids */
 	for (i=1; i<=n_kids; i++) {
-		if (fork() == 0) {
+		if (fork() == 0) { //se figlio
 			srand(getpid()); /* Initialize a different seed per child */
 			i_snd = (i==n_kids ? 1 : i+1);	/* this process is sending a message to process i_snd */
 			while (1) {	/* Loop forever: terminated by SIGALRM */
